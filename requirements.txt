@@ -1,0 +1,6 @@
+tqdm==4.64.1
+PyPDF2==2.11.1
+pdfplumber==0.7.6
+pyperclip==1.8.2
+fpdf==1.7.2
+colorama==0.4.6
