@@ -5,6 +5,7 @@ import subprocess
 import os
 import io
 from fpdf import FPDF
+from tqdm import tqdm
 
 # from Claude
 def check_write_permissions(pdf_folder_path):
@@ -103,7 +104,7 @@ def combine_pdfs(summary_pdf, original_pdf_path, output_pdf_path):
     except Exception as e:
         print(f"Error combining PDFs: {str(e)}")
 
-def process_pdfs(pdf_folder_path):
+""" def process_pdfs(pdf_folder_path):
     for filename in os.listdir(pdf_folder_path):
         if filename.endswith(".pdf"):
             try:
@@ -129,7 +130,39 @@ def process_pdfs(pdf_folder_path):
                 combine_pdfs(summary_pdf, pdf_path, output_pdf_path)
                 print(f"Created summarized PDF: {output_pdf_path}")
             except Exception as e:
-                print(f"Error processing {filename}: {str(e)}")
+                print(f"Error processing {filename}: {str(e)}") """
+
+from tqdm import tqdm
+
+def process_pdfs(pdf_folder_path):
+    pdf_files = [f for f in os.listdir(pdf_folder_path) if f.endswith('.pdf')]
+    
+    for filename in tqdm(pdf_files, desc="Overall Progress"):
+        try:
+            pdf_path = os.path.join(pdf_folder_path, filename)
+            print(f"\nProcessing PDF: {pdf_path}")
+            
+            with tqdm(total=5, desc=f"Processing {filename}", leave=False) as pbar:
+                text = extract_text_from_pdf(pdf_path)
+                pbar.update(1)
+                
+                copy_to_clipboard(text)
+                pbar.update(1)
+                
+                fabric_output = run_fabric_patterns()
+                pbar.update(1)
+                
+                summary_pdf = create_summary_pdf(fabric_output)
+                pbar.update(1)
+                
+                new_filename = "summarized_" + filename
+                output_pdf_path = os.path.join(pdf_folder_path, new_filename)
+                combine_pdfs(summary_pdf, pdf_path, output_pdf_path)
+                pbar.update(1)
+                
+            print(f"Created summarized PDF: {output_pdf_path}")
+        except Exception as e:
+            print(f"Error processing {filename}: {str(e)}")
 
 if __name__ == "__main__":
     pdf_folder_path = "./sourcePDFs"  # Adjust the path if necessary
