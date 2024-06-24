@@ -1,19 +1,19 @@
 # How to Use with Fabric 
 
 1. Clone Fabric https://github.com/danielmiessler/fabric to your local dev system and follow the installation directions.
-    a. You'll have to install pipx, if you only use pip3, as well as Python 3.10 at minimum.
-    b. Have your ChatGPT API key ready. The YouTube transcription features are also amazing, I suggest generating a YouTube API key as well so you can input it during install.
-    c. The NetworkChuck video on the Fabric repo is definitely worth watching. 
+    - You'll have to install pipx, if you only use pip3, as well as Python 3.10 at minimum.
+    - Have your ChatGPT API key ready. The YouTube transcription features are also amazing, I suggest generating a YouTube API key as well so you can input it during install.
+    - The NetworkChuck video on the Fabric repo is definitely worth watching. 
 2. Play around with just Fabric until you get a sense of how it works. On Linux I had to use xclip for clipboard        functions, not pbpaste.
-    a. There's heavy activity on the Fabric repo currently, so at least weekly, you'll need to git pull and fabric --update in the patterns directory.
-    b. They've been saying they plan to migrate to Go since May. You'll have the best experience using Linux.
+    - There's heavy activity on the Fabric repo currently, so at least weekly, you'll need to git pull and fabric --update in the patterns directory.
+    - They've been saying they plan to migrate to Go since May. You'll have the best experience using Linux.
 3. To run this pdfprocess.py script, both it and the PDFs-to-process must be inside the Fabric patterns directory.
-    a. Create a "sourcePDFs" directory inside fabric/patterns. 
-    b. Copy the PDFs you want to process into that directory.
-    c. Place the pdfprocess.py script at the root of the fabric/patterns.
-    d. Ensure that the Python modules in requirement.txt are installed.
-    e. Run the script: python3 pdfprocess.py
-    f. This process could be optimized, but I only have so much time. I'm welcome to feedback on improvments.
+    - Create a "sourcePDFs" directory inside fabric/patterns. 
+    - Copy the PDFs you want to process into that directory.
+    - Place the pdfprocess.py script at the root of the fabric/patterns.
+    - Ensure that the Python modules in requirement.txt are installed.
+    - Run the script: python3 pdfprocess.py
+    - This process could be optimized, but I only have so much time. I'm welcome to feedback on improvments.
 4. Please create an issue if you run into problems. 
 
 # Sample Output
