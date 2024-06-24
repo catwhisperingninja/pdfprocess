@@ -6,6 +6,7 @@ import os
 import io
 from fpdf import FPDF
 from tqdm import tqdm
+import colorama
 
 # from Claude
 def check_write_permissions(pdf_folder_path):
@@ -104,65 +105,79 @@ def combine_pdfs(summary_pdf, original_pdf_path, output_pdf_path):
     except Exception as e:
         print(f"Error combining PDFs: {str(e)}")
 
-""" def process_pdfs(pdf_folder_path):
-    for filename in os.listdir(pdf_folder_path):
-        if filename.endswith(".pdf"):
-            try:
-                pdf_path = os.path.join(pdf_folder_path, filename)
-                print(f"Processing PDF: {pdf_path}")
-                text = extract_text_from_pdf(pdf_path)
-                print(f"Extracted text from {filename}:\n{text[:500]}...\n")
-                
-                copy_to_clipboard(text)
-                print(f"Clipboard contents after copy:\n{pyperclip.paste()[:500]}...\n")
-                
-                fabric_output = run_fabric_patterns()
-                
-                summary_text = fabric_output
-                print(f"Summary text:\n{summary_text[:500]}...\n")
-                
-                summary_pdf = create_summary_pdf(summary_text)
-                print("Summary PDF created successfully")
-                
-                new_filename = "summarized_" + filename
-                output_pdf_path = os.path.join(pdf_folder_path, new_filename)
-                
-                combine_pdfs(summary_pdf, pdf_path, output_pdf_path)
-                print(f"Created summarized PDF: {output_pdf_path}")
-            except Exception as e:
-                print(f"Error processing {filename}: {str(e)}") """
+# Initialize colorama for Windows compatibility
+colorama.init()
 
 from tqdm import tqdm
+import colorama
+
+# Initialize colorama for Windows compatibility
+colorama.init()
+
+# Define color codes (using colorama for better compatibility)
+RED = colorama.Fore.RED
+GREEN = colorama.Fore.GREEN
+YELLOW = colorama.Fore.YELLOW
+RESET = colorama.Fore.RESET
 
 def process_pdfs(pdf_folder_path):
     pdf_files = [f for f in os.listdir(pdf_folder_path) if f.endswith('.pdf')]
     
-    for filename in tqdm(pdf_files, desc="Overall Progress"):
+    # Overall progress bar in yellow
+    for filename in tqdm(pdf_files, desc="Overall Progress", colour='yellow'):
         try:
             pdf_path = os.path.join(pdf_folder_path, filename)
             print(f"\nProcessing PDF: {pdf_path}")
             
-            with tqdm(total=5, desc=f"Processing {filename}", leave=False) as pbar:
-                text = extract_text_from_pdf(pdf_path)
-                pbar.update(1)
+            # Individual file progress bar in yellow
+            with tqdm(total=5, desc=f"Processing {filename}", leave=False, colour='yellow') as pbar:
+                try:
+                    text = extract_text_from_pdf(pdf_path)
+                    pbar.update(1)
+                except Exception as e:
+                    print(f"{RED}Error extracting text: {str(e)}{RESET}")
                 
-                copy_to_clipboard(text)
-                pbar.update(1)
+                try:
+                    copy_to_clipboard(text)
+                    pbar.update(1)
+                except Exception as e:
+                    print(f"{RED}Error copying to clipboard: {str(e)}{RESET}")
                 
-                fabric_output = run_fabric_patterns()
-                pbar.update(1)
+                try:
+                    fabric_output = run_fabric_patterns()
+                    pbar.update(1)
+                except Exception as e:
+                    print(f"{RED}Error running Fabric patterns: {str(e)}{RESET}")
                 
-                summary_pdf = create_summary_pdf(fabric_output)
-                pbar.update(1)
+                try:
+                    summary_pdf = create_summary_pdf(fabric_output)
+                    pbar.update(1)
+                except Exception as e:
+                    print(f"{RED}Error creating summary PDF: {str(e)}{RESET}")
                 
-                new_filename = "summarized_" + filename
-                output_pdf_path = os.path.join(pdf_folder_path, new_filename)
-                combine_pdfs(summary_pdf, pdf_path, output_pdf_path)
-                pbar.update(1)
+                try:
+                    new_filename = "summarized_" + filename
+                    output_pdf_path = os.path.join(pdf_folder_path, new_filename)
+                    combine_pdfs(summary_pdf, pdf_path, output_pdf_path)
+                    pbar.update(1)
+                except Exception as e:
+                    print(f"{RED}Error combining PDFs: {str(e)}{RESET}")
                 
-            print(f"Created summarized PDF: {output_pdf_path}")
+            print(f"{GREEN}Created summarized PDF: {output_pdf_path}{RESET}")
         except Exception as e:
-            print(f"Error processing {filename}: {str(e)}")
+            print(f"{RED}Error processing {filename}: {str(e)}{RESET}")
+
+    # Completion progress bar in green
+    with tqdm(total=1, desc="Completion", colour='green') as pbar:
+        pbar.update(1)
+    print(f"{GREEN}All PDFs processed successfully!{RESET}")
+
+if __name__ == "__main__":
+    pdf_folder_path = "./sourcePDFs"  # Adjust this path as needed
+    process_pdfs(pdf_folder_path)
+
+
+
 
 if __name__ == "__main__":
     pdf_folder_path = "./sourcePDFs"  # Adjust the path if necessary
