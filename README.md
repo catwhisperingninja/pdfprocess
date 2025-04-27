@@ -1,4 +1,6 @@
-# How to Use with Fabric 
+# Fabric Completely Overhauled: Archiving Repo
+## Now Uses Go + Improved Install/Setup
+### Review Updated Fabric Repo: Follow Instructions There. Enjoy! 
 
 1. Clone Fabric https://github.com/danielmiessler/fabric to your local dev system and follow the installation directions.
     - You'll have to install pipx, if you only use pip3, as well as Python 3.10 at minimum.
